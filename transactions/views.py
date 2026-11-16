@@ -4,6 +4,8 @@ from rest_framework import authentication,permissions
 from transactions.models import Expense
 from transactions.serializers import ExpenseSerializer
 from rest_framework.response import Response
+from datetime import datetime
+from django.db.models import Sum
 
 # Create your views here.
 class ExpenseListCreateView(APIView):
@@ -36,16 +38,21 @@ class ExpenseListCreateView(APIView):
             return Response(serializer_instance.data)
 
         else:
-            return Response(serializer_instance.errors)  
+            return Response(serializer_instance.errors) 
+
+from transactions.permissions import IsOwner             
 
 class ExpenseRetrieveUpdateDeleteView(APIView):
 
     authentication_classes=[authentication.BasicAuthentication]
-    permission_classes=[permissions.IsAuthenticated]
+    # permission_classes=[permissions.IsAuthenticated]
+    permission_classes=[IsOwner]
 
     def get(self,request,pk=None):
 
         qs=get_object_or_404(Expense,id=pk)
+
+        self.check_object_permissions(request,qs)
 
         serializer_instance=ExpenseSerializer(qs)
 
@@ -54,6 +61,8 @@ class ExpenseRetrieveUpdateDeleteView(APIView):
     def put(self,request,pk=None):
 
         instance=get_object_or_404(Expense,id=pk)
+
+        self.check_object_permissions(request,instance)
 
         form_data=request.data
 
@@ -74,6 +83,30 @@ class ExpenseRetrieveUpdateDeleteView(APIView):
 
         instance=get_object_or_404(Expense,id=pk)
 
+        self.check_object_permissions(request,instance)
+
         instance.delete()
         
-        return Response({"message":"deleted"})                                
+        return Response({"message":"deleted"}) 
+
+class ExpenseSummaryView(APIView):
+
+    authentication_classes=[authentication.BasicAuthentication]
+
+    permission_classes=[permissions.IsAuthenticated]
+
+    def get(self,request):
+
+        auth_user_expenses=Expense.objects.filter(owner=request.user)
+
+        response_data={
+
+            "todays_total":0,
+            "monthly_total":0
+        } 
+
+        cur_date=datetime.today().date()
+
+        todays_total=auth_user_expenses.filter(created_at__date=cur_date).values("amount").aggregate(total=Sum("amount")).get("total")
+
+        response_data["todays_total"]=todays_total                                   

@@ -20,6 +20,7 @@ from django.urls import path
 from acccounts.views import SignUpView
 from transactions.views import ExpenseListCreateView
 from transactions.views import ExpenseRetrieveUpdateDeleteView
+from transactions.views import ExpenseSummaryView
 
 
 urlpatterns = [
@@ -30,4 +31,5 @@ urlpatterns = [
     #transactions
     path("expenses/",ExpenseListCreateView.as_view()),
     path("expenses/<int:pk>/",ExpenseRetrieveUpdateDeleteView.as_view()),
+    path("expenses/",ExpenseSummaryView.as_view()),
 ]

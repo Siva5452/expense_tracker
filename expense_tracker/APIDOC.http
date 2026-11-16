@@ -26,9 +26,9 @@ Content-Type: application/json
 Authorization: Basic gokul:gokul@123
 
 {
-    "title":"snacks",
-    "amount":170,
-    "category":"food"
+    "title":"jeans",
+    "amount":1000,
+    "category":"shopping"
 }
 
 
@@ -58,5 +58,12 @@ Authorization: Basic gokul:gokul@123
 
 #api call for deleting expense
 ###
-DELETE http://127.0.0.1:8000/expenses/1/
+DELETE http://127.0.0.1:8000/expenses/2/
 Accept: application/json
+Authorization: Basic gokul:gokul@123
+
+#api call for expense summary
+###
+GET http://127.0.0.1:8000/expenses/
+Accept: application/json
+Authorization: Basic gokul:gokul@123
