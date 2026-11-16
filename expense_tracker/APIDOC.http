@@ -1,0 +1,62 @@
+#api call for create user
+###
+POST http://127.0.0.1:8000/accounts/register/
+Content-Type: application/json
+
+{
+    "username":"gokul",
+    "email":"gokul@gamil.com",
+    "password":"gokul@123",
+    "phone":"9457856213",
+    "dob":"2007-11-20"
+}
+
+
+#================expenses===============
+#api call for listing all expenses
+###
+GET http://127.0.0.1:8000/expenses/
+Accept: application/json
+Authorization: Basic gokul:gokul@123
+
+#api call for adding expenses
+###
+POST http://127.0.0.1:8000/expenses/
+Content-Type: application/json
+Authorization: Basic gokul:gokul@123
+
+{
+    "title":"snacks",
+    "amount":170,
+    "category":"food"
+}
+
+
+#api call for fetching expense
+###
+GET http://127.0.0.1:8000/expenses/1/
+Accept: application/json
+Authorization: Basic gokul:gokul@123
+
+#api call for update expense
+###
+put http://127.0.0.1:8000/expenses/1/
+Content-Type: application/json
+Authorization: Basic gokul:gokul@123
+
+{
+  "id": 1,
+  "title": "snacks",
+  "category": "food",
+  "amount": "200",
+  "description": null,
+  "payment_method": "upi",
+  "created_at": "2026-11-13T15:48:41.108544Z",
+  "bill_image": null,
+  "owner": 1
+}
+
+#api call for deleting expense
+###
+DELETE http://127.0.0.1:8000/expenses/1/
+Accept: application/json
