@@ -11,13 +11,22 @@ Content-Type: application/json
     "dob":"2007-11-20"
 }
 
+#============token==============
+###
+POST http://127.0.0.1:8000/token/
+Content-Type: application/json
+
+{
+    "username":"gokul",
+    "password":"gokul@123"
+}
 
 #================expenses===============
 #api call for listing all expenses
 ###
 GET http://127.0.0.1:8000/expenses/
 Accept: application/json
-Authorization: Basic gokul:gokul@123
+Authorization: Token 7a357b4f96e60296833c1433ce75efb6ccaef5e8
 
 #api call for adding expenses
 ###
@@ -26,9 +35,9 @@ Content-Type: application/json
 Authorization: Basic gokul:gokul@123
 
 {
-    "title":"jeans",
-    "amount":1000,
-    "category":"shopping"
+    "title":"movie ticket",
+    "amount":350,
+    "category":"entertainment"
 }
 
 
@@ -64,6 +73,6 @@ Authorization: Basic gokul:gokul@123
 
 #api call for expense summary
 ###
-GET http://127.0.0.1:8000/expenses/
+GET http://127.0.0.1:8000/expenses/summary/
 Accept: application/json
 Authorization: Basic gokul:gokul@123

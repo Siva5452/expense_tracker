@@ -10,7 +10,7 @@ from django.db.models import Sum
 # Create your views here.
 class ExpenseListCreateView(APIView):
     
-    authentication_classes=[authentication.BasicAuthentication]
+    authentication_classes=[authentication.TokenAuthentication]
     permission_classes=[permissions.IsAuthenticated]
 
     def get(self,request):
@@ -44,8 +44,9 @@ from transactions.permissions import IsOwner
 
 class ExpenseRetrieveUpdateDeleteView(APIView):
 
-    authentication_classes=[authentication.BasicAuthentication]
+    # authentication_classes=[authentication.BasicAuthentication]
     # permission_classes=[permissions.IsAuthenticated]
+    authentication_classes=[authentication.TokenAuthentication]
     permission_classes=[IsOwner]
 
     def get(self,request,pk=None):
@@ -91,8 +92,8 @@ class ExpenseRetrieveUpdateDeleteView(APIView):
 
 class ExpenseSummaryView(APIView):
 
-    authentication_classes=[authentication.BasicAuthentication]
-
+    # authentication_classes=[authentication.BasicAuthentication]
+    authentication_classes=[authentication.TokenAuthentication]
     permission_classes=[permissions.IsAuthenticated]
 
     def get(self,request):
@@ -109,4 +110,16 @@ class ExpenseSummaryView(APIView):
 
         todays_total=auth_user_expenses.filter(created_at__date=cur_date).values("amount").aggregate(total=Sum("amount")).get("total")
 
-        response_data["todays_total"]=todays_total                                   
+        response_data["todays_total"]=todays_total 
+
+        #monthy_total
+
+        cur_month=datetime.today().month
+
+        cur_year=datetime.today().year
+
+        monthly_total=auth_user_expenses.filter(created_at__month=cur_month,created_at__year=cur_year).values("amount").aggregate(total=Sum("amount")).get("total")
+
+        response_data["monthly_total"]=monthly_total  
+
+        return Response(response_data)                                

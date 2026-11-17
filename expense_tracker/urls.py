@@ -21,6 +21,7 @@ from acccounts.views import SignUpView
 from transactions.views import ExpenseListCreateView
 from transactions.views import ExpenseRetrieveUpdateDeleteView
 from transactions.views import ExpenseSummaryView
+from rest_framework.authtoken.views import ObtainAuthToken
 
 
 urlpatterns = [
@@ -31,5 +32,6 @@ urlpatterns = [
     #transactions
     path("expenses/",ExpenseListCreateView.as_view()),
     path("expenses/<int:pk>/",ExpenseRetrieveUpdateDeleteView.as_view()),
-    path("expenses/",ExpenseSummaryView.as_view()),
+    path("expenses/summary/",ExpenseSummaryView.as_view()),
+    path("token/",ObtainAuthToken.as_view()),
 ]
